@@ -3,13 +3,15 @@
 // Including the ADKernel base class here so we can extend it
 #include "ADKernelGrad.h"
 
-class ADDiffusion : public ADKernelGrad
+class DarcyPressure : public ADKernelGrad
 {
     public:
     static InputParameters validParams();
-    ADDiffusion(const InputParameters & parameters);
+    DarcyPressure(const InputParameters & parameters);
 
     protected:
-    virtual ADRealVectorValue precomputeQPResidual() override;
+    virtual ADRealVectorValue precomputeQpResidual() override;
+    const Real _permeability;
+    const Real _viscosity;
     
 };

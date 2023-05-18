@@ -1,9 +1,9 @@
-#include "ADDiffusion.h"
+#include "DarcyPressure.h"
 
-registerMooseObject("PhoenixApp",ADDiffusion);
+registerMooseObject("PhoenixApp",DarcyPressure);
 
 InputParameters
-ADDiffusion::validParams()
+DarcyPressure::validParams()
 {
     auto params = ADKernelGrad::validParams();
     params.addClassDescription("Same 'Diffusion' in terms of physics/residual, but the Jacobian "
@@ -11,14 +11,16 @@ ADDiffusion::validParams()
     return params;
 }
 
-ADDiffusion::ADDiffusion(const InputParameters & parameters) : 
-ADKernelGrad(parameters)
+DarcyPressure::DarcyPressure(const InputParameters & parameters) : 
+ADKernelGrad(parameters),
+_permeability(0.8451e-09),
+_viscosity(7.98e-04)
 {
 
 }
 
 ADRealVectorValue
-ADDiffusion::precomputeQpResidual()
+DarcyPressure::precomputeQpResidual()
 {
-    return _grad_u[_qp]; //note _grad_test[_qp] is automatically applied.
+    return (_permeability/_viscosity)*_grad_u[_qp]; //note _grad_test[_qp] is automatically applied.
 }
