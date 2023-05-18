@@ -17,6 +17,7 @@ DarcyPressure::validParams()
         "The dynamic viscosity ($\\mu$) of the fluid, the default value is that of water at 30 "
         "degrees Celcius (7.98e-04 Pa-s).");
     
+    
     return params;
 }
 
@@ -25,7 +26,8 @@ ADKernelGrad(parameters),
 _permeability(getParam<Real>("permeability")),
 _viscosity(getParam<Real>("viscosity"))
 {
-
+  if(_viscosity == 0)
+    paramError("viscosity", "The viscosity must be a non-zero real number.");
 }
 
 ADRealVectorValue
