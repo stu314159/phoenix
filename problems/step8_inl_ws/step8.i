@@ -9,7 +9,7 @@
   []
   coord_type = RZ
   rz_coord_axis = X
-  uniform_refine = 3
+  uniform_refine = 2
 []
 
 [Variables]
@@ -75,7 +75,6 @@
     boundary = left
     function = 'if(t<0,350+50*t,350)'
   []
-
   [outlet_temperature]
     type = HeatConductionOutflow
     variable = temperature
@@ -88,6 +87,31 @@
     type = PackedColumn
     radius = 1
     temperature = temperature
+    porosity = '0.25952 + 0.7*y/0.0257'
+  []
+[]
+
+[Postprocessors]
+  [average_temperature]
+    type = ElementAverageValue
+    variable = temperature
+  []
+  [outlet_heat_flux]
+    type = ADSideDiffusiveFluxIntegral
+    variable = temperature
+    boundary = right
+    diffusivity = thermal_conductivity
+  []
+[]
+
+[VectorPostprocessors]
+  [temperature_sample]
+    type = LineValueSampler
+    num_points = 500
+    start_point = '0.1 0      0'
+    end_point =   '0.1 0.0257 0'
+    variable = temperature
+    sort_by = y
   []
 []
 
@@ -118,25 +142,5 @@
 
 [Outputs]
   exodus = true
-[]
-
-[Adaptivity]
-  marker = error_frac
-  max_h_level = 3
-  cycles_per_step = 3
-  [Indicators]
-    [temperature_jump]
-      type = GradientJumpIndicator
-      variable = temperature
-      scale_by_flux_faces = true
-    []
-  []
-  [Markers]
-    [error_frac]
-      type = ErrorFractionMarker
-      coarsen = 0.15
-      indicator = temperature_jump
-      refine = 0.7
-    []
-  []
+  csv = true
 []
