@@ -2,7 +2,7 @@
 #include "Function.h"
 #include "DelimitedFileReader.h"
 
-registerMooseObject("DarcyThermoMechApp", PackedColumn);
+registerMooseObject("PhoenixApp", PackedColumn);
 
 InputParameters
 PackedColumn::validParams()
